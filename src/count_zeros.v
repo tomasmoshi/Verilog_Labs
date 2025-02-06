@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module leading_zeroes(D, E, F, fifth_bit);
+module count_zeros(D, E, F, fifth_bit);
 
     // Inputs
     input [11:0] D;

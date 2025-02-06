@@ -10,7 +10,7 @@ module FPCVT_tb;
 	wire [2:0] E;
 	wire [3:0] F;
 
-    fpcvt uut (
+    FPCVT uut (
         .D(D),
         .S(S),
         .E(E),
