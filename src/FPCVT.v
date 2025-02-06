@@ -16,10 +16,10 @@ module FPCVT(D, S, E, F);
 	wire [3:0] sig;
 
 	// Convert D from Two's Complement to Signed Magnitude
-	to_signed_magnitude m1 (.D(D), .S(S), .signed_mag(signed_mag));
+	signed_conversion m1 (.D(D), .S(S), .signed_mag(signed_mag));
 
 	// Count leading zeroes and extract leading bits
-	leading_zeroes m2 (.D(signed_mag), .E(exp), .F(sig), .fifth_bit(fifth_bit));
+	count_zeroes m2 (.D(signed_mag), .E(exp), .F(sig), .fifth_bit(fifth_bit));
 
 	// Round
 	handle_round m3 (.E_in(exp), .F_in(sig), .fifth_bit(fifth_bit), .E_out(E), .F_out(F));
