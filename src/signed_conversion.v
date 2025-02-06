@@ -1,4 +1,5 @@
 `timescale 1ns / 1ps
+
 module signed_conversion(D, S, signed_mag);
 
 	 // Inputs
