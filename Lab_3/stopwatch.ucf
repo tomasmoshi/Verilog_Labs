@@ -1,0 +1,8 @@
+## Clock Signal
+NET "clk"       LOC = "V10" | IOSTANDARD = "LVCMOS33"; 
+
+## Display
+
+## Switches
+
+## Buttons
