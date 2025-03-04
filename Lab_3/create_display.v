@@ -1,18 +1,18 @@
 `timescale 1ns/1ps
 
-module counter(
-	// Inputs
-	input clk_1hz,
-	input clk_2hz,
-	input sel,
-	input adj,
-	input rst,
-	input pause,
-	// Outputs
-	output reg [3:0] minutes_tens,
-	output reg [3:0] minutes_ones,
-	output reg [3:0] seconds_tens,
-	output reg [3:0] seconds_ones
+module create_display(
+    // Inputs
+    input clk_fst,
+    input clk_blnk,
+    input sel,
+    input adj,
+    input [6:0] minutes_tens_cathode,
+    input [6:0] minutes_ones_cathode,
+    input [6:0] seconds_tens_cathode,
+    input [6:0] seconds_ones_cathode,
+    // Outputs
+    output reg [6:0] cathode,
+    output reg [3:0] anode
 );
 	
 	// Get constants

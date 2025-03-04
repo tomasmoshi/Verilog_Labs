@@ -12,19 +12,19 @@ module stopwatch(
 	output [3:0] anode
 );
 	
-	// Divided clock signals
+	// Divided clock
 	wire clk_2hz;
 	wire clk_1hz;
 	wire clk_fst;
 	wire clk_blnk;
 	
-	// Debounced input signals
+	// signals
 	wire sel;
 	wire adj;
 	wire rst;
 	wire pause;
 	
-	// FSM states
+	// states
 	wire [3:0] minutes_tens;
 	wire [3:0] minutes_ones;
 	wire [3:0] seconds_tens;
@@ -36,7 +36,7 @@ module stopwatch(
 	wire [6:0] seconds_tens_cathode;
 	wire [6:0] seconds_ones_cathode;
 
-	// Divide master clock into 4 signals
+	// clock into 4 signals
 	clock_divider clk_div (
 		.clk(clk),
 		.rst(RESET),
@@ -46,7 +46,7 @@ module stopwatch(
 		.clk_blnk(clk_blnk)
 	);
 	
-	// Debounce input signals
+	// input signals
 	debouncer sel_debouncer (
 		.clk(clk),
 		.signal_i(SEL),
@@ -108,16 +108,16 @@ module stopwatch(
 	
 	// Set the display
 	create_display display (
-		.clk_fst(clk_fst),
-		.clk_blnk(clk_blnk),
-		.sel(sel),
-		.adj(adj),
-		.minutes_tens_cathode(minutes_tens_cathode),
-		.minutes_ones_cathode(minutes_ones_cathode),
-		.seconds_tens_cathode(seconds_tens_cathode),
-		.seconds_ones_cathode(seconds_ones_cathode),
-		.cathode(cathode),
-		.anode(anode)
+    .clk_fst(clk_fst),
+    .clk_blnk(clk_blnk),
+    .sel(sel),
+    .adj(adj),
+    .minutes_tens_cathode(minutes_tens_cathode),
+    .minutes_ones_cathode(minutes_ones_cathode),
+    .seconds_tens_cathode(seconds_tens_cathode),
+    .seconds_ones_cathode(seconds_ones_cathode),
+    .cathode(cathode),
+    .anode(anode)
 	);
 	
 endmodule
