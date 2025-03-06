@@ -17,32 +17,23 @@ module state_machine(
     localparam GAME_OVER = 2'b11;
     
     always @(posedge clk or posedge rst) begin
-        if (rst) begin
-            state <= IDLE;
-        end else begin
-            case (state)
-                IDLE: begin
-                    if (roll) 
-                        state <= ROLLING;
-                    else if (score_mode_switch) 
-                        state <= SCORE_MODE;
-                end
-                
-                ROLLING: begin
-                    if (win || loss) 
-                        state <= GAME_OVER;
-                end
-                
-                SCORE_MODE: begin
-                    if (!score_mode_switch) 
-                        state <= IDLE;
-                end
-                
-                GAME_OVER: begin
-                    if (rst) 
-                        state <= IDLE;
-                end
-            endcase
-        end
+    if (rst) begin
+        state <= IDLE;
+    end else begin
+        case (state)
+            IDLE: 
+                if (roll) state <= ROLLING;
+                else if (score_mode_switch) state <= SCORE_MODE;
+            ROLLING: 
+                if (win || loss) state <= GAME_OVER;
+            SCORE_MODE: 
+                if (!score_mode_switch) state <= IDLE;
+            GAME_OVER: 
+                if (rst) state <= IDLE;
+            default: 
+                state <= IDLE; // Catch unexpected states
+        endcase
     end
+end
+
 endmodule

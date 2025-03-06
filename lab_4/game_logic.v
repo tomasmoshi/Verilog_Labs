@@ -9,7 +9,8 @@ module game_logic(
     output reg win,
     output reg loss,
     output reg [3:0] point,
-    output reg point_active
+    output reg point_active,
+    input current_player
 );
 
     reg [3:0] sum;

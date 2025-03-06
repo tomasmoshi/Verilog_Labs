@@ -18,6 +18,15 @@ module top_module(
     wire win, loss, point_active;
     
     reg current_player;
+
+    wire toggle_player_clean;
+    button_debouncer debounce_toggle(
+        .clk(clk),
+        .rst(rst),
+        .button_in(toggle_player),
+        .button_out(toggle_player_clean)
+    );
+
     
     // Clock Divider for game operations
     wire slow_clk;
@@ -46,15 +55,16 @@ module top_module(
         .win(win),
         .loss(loss),
         .point(point),
-        .point_active(point_active)
+        .point_active(point_active),
+        .current_player(current_player)
     );
     
     // Seven-Segment Display Control
     seven_seg_display display_ctrl(
         .clk(slow_clk),
         .rst(rst),
-        .win(win),
-        .loss(loss),
+        .dice1(dice1),
+        .dice2(dice2),
         .point(point),
         .point_active(point_active),
         .seg(seg),
@@ -62,10 +72,18 @@ module top_module(
     );
     
     // LED Control
-    always @(posedge clk) begin
+    always @(posedge clk or posedge rst) begin
+        if(rst) begin
+            current_player<=0;
+            win_led<=0;
+            loss_led<=0;
+            score_mode_led<=0;
+        end else begin
+        if (toggle_player_clean)
+            current_player <= ~current_player;
         win_led <= win;
         loss_led <= loss;
         score_mode_led <= score_mode_switch;
+        end
     end
-    
 endmodule
