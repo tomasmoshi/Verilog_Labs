@@ -1,81 +1,48 @@
-`timescale 1ns / 1ps
-
-module game_logic(
+// game_logic.v - Game Logic Module
+module game_logic (
     input clk,
-    input rst,
+    input reset,
     input roll,
-    input [3:0] dice1,
-    input [3:0] dice2,
-    output reg win,
-    output reg loss,
-    output reg [3:0] point,
-    output reg point_active,
-    input current_player
+    input toggle_player,
+    input score_mode_switch,
+    output reg [6:0] seg,
+    output reg [3:0] an,
+    output reg win_led,
+    output reg loss_led,
+    output reg score_mode_led,
+    output reg current_player
 );
 
-    reg [3:0] sum;
-    reg [1:0] state;
+    reg [3:0] state;
     
-    // State Definitions
-    localparam IDLE = 2'b00;
-    localparam FIRST_ROLL = 2'b01;
-    localparam POINT_PHASE = 2'b10;
-    localparam GAME_OVER = 2'b11;
-
-    always @(posedge clk or posedge rst) begin
-        if (rst) begin
-            sum <= 4'd0;
-            win <= 0;
-            loss <= 0;
-            point <= 4'd0;
-            point_active <= 0;
-            state <= IDLE;
+    always @(posedge clk or posedge reset) begin
+        if (reset) begin
+            state <= 4'b0000;
+            current_player <= 0;
+            win_led <= 0;
+            loss_led <= 0;
+            score_mode_led <= 0;
         end else begin
-            case (state)
-                IDLE: begin
-                    if (roll) begin
-                        sum <= dice1 + dice2;
-                        state <= FIRST_ROLL;
-                    end
-                end
-
-                FIRST_ROLL: begin
-                    if (sum == 7 || sum == 11) begin
-                        win <= 1;
-                        state <= GAME_OVER;
-                    end else if (sum == 2 || sum == 3 || sum == 12) begin
-                        loss <= 1;
-                        state <= GAME_OVER;
-                    end else begin
-                        point <= sum;
-                        point_active <= 1;
-                        state <= POINT_PHASE;
-                    end
-                end
-
-                POINT_PHASE: begin
-                    if (roll) begin
-                        sum <= dice1 + dice2;
-                        if (sum == point) begin
-                            win <= 1;
-                            state <= GAME_OVER;
-                        end else if (sum == 7) begin
-                            loss <= 1;
-                            state <= GAME_OVER;
-                        end
-                    end
-                end
-
-                GAME_OVER: begin
-                    if (rst) begin
-                        win <= 0;
-                        loss <= 0;
-                        point <= 4'd0;
-                        point_active <= 0;
-                        state <= IDLE;
-                    end
-                end
-            endcase
+            if (roll) state <= state + 1;
+            if (toggle_player) current_player <= ~current_player;
+            if (score_mode_switch) score_mode_led <= ~score_mode_led;
         end
+    end
+    
+    always @(*) begin
+        case (state)
+            4'b0000: seg = 7'b1111110; // 0
+            4'b0001: seg = 7'b0110000; // 1
+            4'b0010: seg = 7'b1101101; // 2
+            4'b0011: seg = 7'b1111001; // 3
+            4'b0100: seg = 7'b0110011; // 4
+            4'b0101: seg = 7'b1011011; // 5
+            4'b0110: seg = 7'b1011111; // 6
+            4'b0111: seg = 7'b1110000; // 7
+            4'b1000: seg = 7'b1111111; // 8
+            4'b1001: seg = 7'b1111011; // 9
+            default: seg = 7'b0000000; // Off
+        endcase
+        an = 4'b1110;
     end
 endmodule
