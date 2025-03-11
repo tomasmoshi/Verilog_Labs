@@ -11,15 +11,15 @@ module led_control(
     output reg score_mode_led
 );
 
-    always @(posedge clk or posedge rst) begin
-        if (rst) begin
-            win_led <= 0;
-            loss_led <= 0;
-            score_mode_led <= 0;
-        end else begin
-            win_led <= win;
-            loss_led <= loss;
-            score_mode_led <= score_mode;
-        end
+always @(posedge clk or posedge rst) begin
+    if (rst) begin
+        win_led <= 0;
+        loss_led <= 0;
+        score_mode_led <= 0;
+    end else begin
+        win_led <= win;
+        loss_led <= loss;
+        score_mode_led <= score_mode;
     end
+end
 endmodule
